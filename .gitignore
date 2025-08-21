@@ -1,0 +1,9 @@
+# secrets
+.env
+
+# dependencies / build cache
+node_modules/
+dist/
+
+# logs
+*.log
