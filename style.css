@@ -1,0 +1,150 @@
+body{
+    background-color:rgb(25, 21, 44);
+}
+    .header a {
+        display: block;
+        border: outset 4px #000000;
+        background-color:darkgray;
+        color: lavenderblush;
+        margin: 50px auto;
+        width: fit-content;
+        padding: 4px 4px 7px 7px;
+        font-family:'Times New Roman', Times, serif;
+        text-decoration: none;
+    }
+    p.desc{
+        color: aliceblue;
+        text-align:center;
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+
+    .top_nav {
+    overflow: hidden;
+    padding: 10px;
+    }
+
+    .top_nav .search_container {
+        margin: 0 auto;
+    }
+
+    form {
+        display: block;
+        width: 600px;
+        background-color: #151f30;
+        border-style: inset;
+        border-color: #000000;
+        border-width: 2px;
+        border-radius: 15px;
+        margin: 30px auto;
+        
+    }
+
+    input {
+        all: unset;
+        padding: 16px;
+        height: 100%;
+        width: 100%;
+        color: aliceblue;
+    }
+
+    .sign_up{
+        position:fixed;
+        top: 35px;
+        right: 35px;
+        margin: 20px auto;
+    }
+
+    .sign_up button{
+        background-color:steelblue;
+        color: azure;
+        border-color:darkorange;
+        border-width: 2px;
+        border-style: solid;
+        border-radius: 6px;
+        font-weight: bold;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        min-width: 125px;
+        min-height: 35px;
+        cursor: pointer;
+    }
+
+    .sign_up button:hover{
+        background-color: aqua;
+        border-color:deeppink;
+    }
+
+    .selection {
+        display:grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+        width: fit-content;
+       margin: 20px 20px 20px 20px;
+    }
+
+    .genre, .list{
+        position:relative;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        align-items: center;
+        justify-items: center;
+        min-height: 180px;
+    }
+    
+    .dropdown_bttn{
+        background-color:#1a2437;
+        color:aliceblue;
+        border: 2px outset #000000;
+        border-radius: 20px;
+        text-align: center;
+        font: italic bold 1rem Times;
+        padding: 12px 15px 15px;
+        cursor: pointer;
+        width: 250px;
+    }
+
+    .dropdown_menu{
+        display:none;
+        position: static;
+        background-color: lightblue;
+        border: 5px solid #000000;
+        width: 175px;
+        text-align: center;
+        height: 175px;
+        overflow-y: auto;
+    }
+    .dropdown_item{
+        padding: 12px 15px 15px;
+    }
+
+    .dropdown_item:focus-within, .dropdown_item:hover{
+        background-color:cornflowerblue;
+        border: #000000;
+    }
+
+    .dropdown_bttn:is(:hover, :focus) {
+        background-color: blue;
+    }
+    
+    .dropdown_bttn:is(:hover, :focus) + .dropdown_menu, :is(.genre, .list):focus-within .dropdown_menu {
+        display: block;
+    }
+
+    .dropdown_menu:hover {
+        display: block;
+    }
+
+    button.options {
+        width: 150px;
+        height: 35px;
+        background-color:dodgerblue;
+        color: whitesmoke;
+        border: 3px inset #000000;
+        border-radius: 6px;
+        text-align: center;
+        font: italic bold 1rem sans-serif;
+        cursor: pointer;
+    }
+
+    button.options:hover{
+        background-color: aqua;
+    }

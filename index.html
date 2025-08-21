@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+            <title>Cinema Colosseum</title>
+            <link rel="stylesheet" href="style.css">
+            <link rel="stylesheet" href="movies.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        </head>
+    <body>
+        <h1 class="header"> <a href="#"><em>Cinema Colosseum</em></a></h1>
+        <p class="desc">
+            Welcome to the Colosseum! This is where your favorite movies go head to head to see which come out on top. 
+        </p>
+        <p class="desc"> <ins><b>Ready to proceed?</b></ins> </p>
+
+        <div class='sign_up'>
+            <button>Log in/Sign up</button>
+        </div>
+
+        <div class="top_nav">
+            <div class="search_container">
+                <form role="search_bar" id="form">
+                    <input type="search" id="query" name="q" placeholder="Search Movies/TV Shows">
+                </form>
+            </div>
+        </div>
+        
+        <div class="selection">
+        <div class="card">
+            <h3>Looking for movies of a specific genre?</h3>
+            <p>Here you will be able to select among our 15 genres for which you can add up to a max of 5. 
+                Once you begin you will only be shown movies that match your selections</p>
+        <div class="genre movies_genre">
+        <button class="dropdown_bttn">Genre</button>
+        <div class="dropdown_menu">
+            <div class="dropdown_item">Action</div>
+            <div class="dropdown_item">Adventure/Fantasy</div>
+            <div class="dropdown_item">Drama</div>
+            <div class="dropdown_item">Comedy</div>
+            <div class="dropdown_item">Thriller</div>
+            <div class="dropdown_item">Animation</div>
+            <div class="dropdown_item">SciFi</div>
+            <div class="dropdown_item">Anime</div>
+            <div class="dropdown_item">Horror</div>
+            <div class="dropdown_item">Sports</div>
+            <div class="dropdown_item">Western</div>
+            <div class="dropdown_item">Romantic Comedy</div>
+            <div class="dropdown_item">Anime</div>
+            <div class="dropdown_item">Black Comedy</div>
+            <div class="dropdown_item">War</div>
+            <div class="dropdown_item">Documentary</div>
+            <div class="dropdown_item">Crime/Mystery</div>
+            <div class="dropdown_item">Musical</div>
+        </div>
+        </div>
+        <button class="options" id="movies_genre">Find Movies</button>
+        </div>
+        <div class="card">
+            <h3>Want to play through our most popular lists?</h3>
+            <p>Here you will be able to play through our most popular lists created by the very users of this site. 
+                These lists may also have custom prompts allowing for more diverse ways of playing.</p>
+            <div class="list movies_list">
+        <button class="dropdown_bttn">List</button>
+        <div class="dropdown_menu">
+            <div class="dropdown_item">Harry Potter</div>
+            <div class="dropdown_item">Star Wars</div>
+            <div class="dropdown_item">Superheores</div>
+            <div class="dropdown_item">Lord of the Rings</div>
+        </div>
+        </div>
+        <button class="options" id="movies_list">Find Movies</button>
+        </div>
+        <div class="card">
+            <h3>Not looking for anything specfic?</h1> 
+            <p>Here you will be shown a large assortment of movies to rate against each other of many different genres.</p>
+            <button class="options" id="random_movies">Find Movies</button>
+        </div>
+        <div class="card">
+            <h3>Looking for TV Shows of a specific genre?</h3>
+            <p>Here you will be able to select among our 15 genres for which you can add up to a max of 5. 
+                Once you begin you will only be shown TV that match your selections</p>
+            <div class="genre tv_genre">
+        <button class="dropdown_bttn">Genre</button>
+        <div class="dropdown_menu">
+            <div class="dropdown_item">Action</div>
+            <div class="dropdown_item">Adventure/Fantasy</div>
+            <div class="dropdown_item">Drama</div>
+            <div class="dropdown_item">Comedy</div>
+            <div class="dropdown_item">Thriller</div>
+            <div class="dropdown_item">Animation</div>
+            <div class="dropdown_item">SciFi</div>
+            <div class="dropdown_item">Anime</div>
+            <div class="dropdown_item">Horror</div>
+            <div class="dropdown_item">Sports</div>
+            <div class="dropdown_item">Western</div>
+            <div class="dropdown_item">Romantic Comedy</div>
+            <div class="dropdown_item">Anime</div>
+            <div class="dropdown_item">Black Comedy</div>
+            <div class="dropdown_item">War</div>
+            <div class="dropdown_item">Documentary</div>
+            <div class="dropdown_item">Crime/Mystery</div>
+            <div class="dropdown_item">Musical</div>
+        </div>
+        </div>
+         <button class="options" id="tv_genre">Find TV Shows</button>
+        </div>
+            <div class="card">
+            <h3>Want to play through our most popular lists? </h3>
+            <p>Here you will be able to play through our most popular lists created by the very users of this site. 
+                These lists may also have custom prompts allowing for more diverse ways of playing.</p>
+            <div class="list tv_list">
+        <button class="dropdown_bttn">List</button>
+        <div class="dropdown_menu">
+            <div class="dropdown_item">Superheores</div>
+            <div class="dropdown_item">Star Wars</div>
+        </div>
+        </div>
+        <button class="options" id="tv_list">Find TV Shows</button>
+        </div>
+        <div class="card">
+            <h3>Not looking for anything specfic?</h1> 
+            <p>Here you will be shown a large assortment of TV Shows to rate against each other of many different genres.</p>
+            <button class="options" id="random_tv">Find TV Shows</button>
+        </div>
+        </div>
+        <script src='script.js' defer></script>
+    </body>
+</html>
