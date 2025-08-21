@@ -1,0 +1,26 @@
+body{
+    background-color:rgb(25, 21, 44);
+}
+
+#section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin: 20px;
+    justify-items: center;
+}
+
+.poster {
+    height: 400px;
+    width: 300px;
+    border-radius: 20px;
+}
+
+.card {
+    position: relative;
+    border-radius: 20px;
+    padding: 15px;
+    background-color: #151f30;
+    text-align: center;
+    color: aliceblue;
+}
