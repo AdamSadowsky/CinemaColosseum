@@ -12,10 +12,6 @@ let rightMovieImage;
 let leftMovieWatchable
 let rightMovieWatchable;
 let skip;
-const sign_up = document.querySelector('.sign_up');
-
-
-signUp.onclick = signUp();
 
 //Determines if the clicked item belongs to a genre and assigns the container 
 document.querySelectorAll('.dropdown_item').forEach(item => {
@@ -92,9 +88,16 @@ startBttn.forEach(bttn => {
 });
 
 function start(type, category){
-
+    const url = new URL('game.html', window.location.href);
+    url.searchParams.set('type', type === 0 ? 'movie' : 'tv');
+    if(Array.isArray(category)){
+        category.forEach(g => url.searchParams.append('genre', g));
+    } else if(category){
+        url.searchParams.set('list', category);
+    }
+    window.location.href = url.toString();
 }
-
+  
 function signUp(){
-
+ 
 }

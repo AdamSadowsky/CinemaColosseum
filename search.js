@@ -40,8 +40,9 @@ form.addEventListener('submit', (e) => {
     e.preventDefault();
     main.innerHTML = '';
     const searchItem = search.value;
-    if(searchItem){
-        displayMovies(SEARCHAPI + searchItem);
+    const q = searchItem.trim();
+    if(q){
+        displayMovies(SEARCHAPI + encodeURIComponent(q));
         search.value = searchItem;
     }
 });
