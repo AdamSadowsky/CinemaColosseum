@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cinema Colosseum</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="movies.css">
+        <link rel="stylesheet" href="game.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    </head>
+    <body>
+        <h1 class="header">
+            <a href="index.html">Cinema Colosseum</a>
+        </h1>
+        <div class="arena" id="arena"></div>
+        <template id="card_tmp">
+                <div class="card">
+                    <img class="poster" alt="">
+                    <h3 class="title"></h3>
+                    <h3 class="date"></h3>
+                    <p class="meta"></p>
+                </div>
+            </template>
+        <button class="skip" id="skip">Skip</button>
+        <button id="next" style="display: none;">
+            <span class="material-icons">arrow_forward</span>
+        </button>
+        <script src="game.js" defer></script>
+    </body>
+</html>

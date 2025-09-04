@@ -3,15 +3,31 @@ body{
 }
     .header a {
         display: block;
-        border: outset 4px #000000;
-        background-color:darkgray;
+        border: 2px solid purple;
+        border-radius: 16px;
+        background-color:darkslategray;
         color: lavenderblush;
-        margin: 50px auto;
+        margin: 15px auto;
         width: fit-content;
-        padding: 4px 4px 7px 7px;
+        text-align: center;
+        padding: 10px;
         font-family:'Times New Roman', Times, serif;
         text-decoration: none;
     }
+
+    #search {
+        display: block;
+        width: fit-content;
+        margin: 25px auto;
+        padding: 20px;
+        background-color:steelblue;
+        border: 2px outset whitesmoke;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
     p.desc{
         color: aliceblue;
         text-align:center;
@@ -19,12 +35,16 @@ body{
     }
 
     .top_nav {
-    overflow: hidden;
-    padding: 10px;
+        overflow: hidden;
+        padding: 10px;
     }
 
-    .top_nav .search_container {
+    .top_nav .search_bttn {
         margin: 0 auto;
+    }
+
+    .top_nav #search:hover {
+        background-color:aqua;
     }
 
     form {
@@ -48,7 +68,7 @@ body{
     }
 
     .sign_up{
-        position:fixed;
+        position:absolute;
         top: 35px;
         right: 35px;
         margin: 20px auto;
@@ -76,9 +96,9 @@ body{
     .selection {
         display:grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 25px;
+        gap: 50px;
         width: fit-content;
-       margin: 20px 20px 20px 20px;
+        margin: 40px;
     }
 
     .genre, .list{
@@ -93,7 +113,7 @@ body{
     .dropdown_bttn{
         background-color:#1a2437;
         color:aliceblue;
-        border: 2px outset #000000;
+        border: 3px outset purple;
         border-radius: 20px;
         text-align: center;
         font: italic bold 1rem Times;
@@ -133,18 +153,18 @@ body{
         display: block;
     }
 
-    button.options {
+    .options {
         width: 150px;
         height: 35px;
         background-color:dodgerblue;
         color: whitesmoke;
-        border: 3px inset #000000;
+        border: 2px inset whitesmoke;
         border-radius: 6px;
         text-align: center;
         font: italic bold 1rem sans-serif;
         cursor: pointer;
     }
 
-    button.options:hover{
+    .options:hover{
         background-color: aqua;
     }
