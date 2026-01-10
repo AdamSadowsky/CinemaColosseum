@@ -4,6 +4,12 @@
 Cinema Colosseum is a full-stack web application that gamifies the movie rating system. Users choose between pairs of movies in a head-to-head format, making voting fun and interactive while discovering new films.
 Movie rating are effected by votes with an algorithm to determine how much a movie rating changes based on the matchup.
 
+## Demo Video
+[![Cinema Colosseum Demo](https://img.youtube.com/vi/v2sua8qhYCc/0.jpg)](https://youtu.be/v2sua8qhYCc)
+
+## Website
+https://cinemacolosseum.com/
+
 ## Features
 - **Movie Pair Voting** – Two movies are displayed side by side, and the user votes for their favorite.
 - **Dynamic Movie Cards** – Cards are generated on the fly using live data from TMDB.
