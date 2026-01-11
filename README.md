@@ -11,10 +11,10 @@ https://cinemacolosseum.com/
 
 ## Features
 - **Movie and TV Pair Voting** – Two movies are displayed side by side, and the user votes for their favorite.
-- **Dynamic Cinema Cards** – Cards are generated on the fly using live data from TMDB.
-- **Skip Option** – Users can skip a matchup and load a new pair.
-- **Interactive Experience** – Votes are recorded and the next matchup is shown instantly.
-- **Cinema Discovery** – Encourages users to find new films and shows through gamified comparisons.
+- **Discover Page** - Showcases the most popular movies and TV shows out today.
+- **Leaderboards** - Displays the top 100 most popular movies and TV shows based on community ratings
+- **Search** - Users can search up any movie or TV show and find more details on it.
+- **Cinema Details** – Displays cinema details including title, release date, description, and its Elo rating.
 
 ## Tech Stack
 **Frontend**
