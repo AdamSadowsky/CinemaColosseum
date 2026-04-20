@@ -1,0 +1,240 @@
+.leaderboards {
+    display: block;
+    position: relative;
+    color: aliceblue;
+    text-align: center;
+    width: min(1400px, calc(100% - 32px));
+    margin: 0 auto;
+}
+
+
+.leaderboards.is-loading {
+    pointer-events: none;
+}
+
+.leaderboards.is-loading > * {
+  opacity: 0;
+}
+
+.leaderboards.is-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 6px solid orange;
+    border-top-color: orangered;
+    animation: spin 0.9s linear infinite;
+    z-index: 1;
+}
+
+@keyframes spin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+.lb_head {
+    margin-bottom: 50px;
+    display: block;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight:lighter;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    background-image: linear-gradient(90deg, #ed8b1a, #e20808);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1;
+}
+
+.lb_dd_wrap{
+  position: relative;
+  width: min(420px, 92%);
+  margin: 0 auto;
+
+}
+
+.dropdown_bttn {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.leaderboard_dropdown {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none; 
+    background-color: #111c33;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    text-align: center;
+    height: 95px;
+    border: 2px solid purple;
+    z-index: 1;
+}
+
+.row {
+    display: flex;
+    position: relative;
+    flex-wrap: wrap;
+    width: min(1100px, 92%);
+    min-height: 150px;
+    background: linear-gradient(90deg, rgb(91, 95, 95), rgb(69, 94, 99), rgb(32, 45, 68));
+    border: 2px solid purple;
+    border-radius: 32px;
+    margin: 10px auto;
+    align-items: center;
+}
+
+.rank, .divider, .poster, .title_date_wrap, .info_wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 25px;
+}
+
+.rank {
+    width: 80px;
+    height: 100%;
+    background: linear-gradient(90deg, orange, orangered);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 28px;
+    margin: 0;
+}
+
+.divider {
+    width: 1px;
+    height: 125px;
+    background-color: orangered;
+    box-shadow: 0 0 5px 1px orangered;
+    border-radius: 16px;
+    margin: 0;
+}
+
+.poster {
+    width: 90px;
+    height: 90%;
+    aspect-ratio: 4/5;
+    border: 2px solid purple;
+}
+
+.title_date_wrap {
+    width: 35%;
+    height: 50%;
+    text-align: center;
+    flex-direction: column;
+}
+
+.title, .date, .rating, .record, .win_rate {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    font-size: 18px;
+    color: white;
+}
+
+.title {
+    font-size: 28px;
+}
+
+.info_wrap {
+    flex-direction: column;
+    min-width: 35%;
+    max-width: 40%;
+    height: 90%;
+    text-align: center;
+    border: 2px solid purple;
+    border-radius: 16px;
+    background-color: rgba(10, 15, 30, .25);
+    font-weight: bold;
+}
+
+.rating, .record, .win_rate {
+    margin: 10px;
+}
+
+.rating {
+    background: linear-gradient(90deg, orange, orangered);
+    background-clip: border-box;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.record {
+    background: linear-gradient(90deg, orange, orangered);
+    background-clip: border-box;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.win_rate {
+    background: linear-gradient(90deg, orange, orangered);
+    background-clip: border-box;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+@media (max-width: 650px) {
+  .lb_dd_wrap{
+    width: min(320px, 92%);
+  }
+
+  .row{
+    width: 92%;
+    min-height: 0;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px 12px;
+    border-radius: 22px;
+    gap: 10px;
+  }
+
+  .rank, .divider, .poster, .title_date_wrap, .info_wrap {
+    margin-left: 0; /* ✅ kill the left push */
+  }
+
+  .divider{
+    display: none; /* ✅ cleaner on mobile */
+  }
+
+  .rank{
+    width: auto;
+    font-size: 22px;
+  }
+
+  .poster{
+    width: 84px;
+    height: auto; /* ✅ stops giant poster */
+  }
+
+  .title_date_wrap{
+    width: 100%;
+  }
+
+  .title{
+    font-size: 20px;
+    line-height: 1.15;
+  }
+
+  .date{
+    font-size: 16px;
+    opacity: 0.9;
+  }
+
+  .info_wrap{
+    width: 100%;
+    min-width: 0;
+    padding: 10px 8px;
+  }
+
+  .rating, .record, .win_rate{
+    margin: 6px 0;
+    font-size: 14px;
+  }
+}
