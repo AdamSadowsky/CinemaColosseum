@@ -1,0 +1,397 @@
+.wrap {
+    position: relative;
+    width: 80%;
+    margin: 20px auto;
+}
+
+.arenaBlock{
+    position: relative;
+    width: 60%;
+    margin: 0 auto;
+    min-height: 600px;
+}
+
+.arena {
+    display: grid;
+    position: relative;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+    margin: 25px auto;
+    transition: 
+    opacity 200ms ease;
+}
+
+.arenaBlock.is-loading {
+    pointer-events: none;
+}
+
+.arenaBlock.is-loading > * {
+  opacity: 0;
+}
+
+.arenaBlock.is-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 6px solid orange;
+    border-top-color: orangered;
+    animation: spin 0.9s linear infinite;
+    z-index: 1;
+}
+
+@keyframes spin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+.arena .game_card:nth-child(1) { background-color: crimson;}
+.arena .game_card:nth-child(2) { background-color: dodgerblue;}
+
+.game_card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    padding: 10px 10px 5px 10px;
+    text-align: center;
+    color: aliceblue; 
+    border: 2px solid transparent;
+    transition: 
+    border 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.game_card:hover {
+    border-color:orangered;
+    box-shadow: 0 0 4px 2px orangered;
+}
+
+.winner:hover, .info:hover {
+    border-color:goldenrod;
+    box-shadow: 0 0 4px 2px goldenrod;
+}
+
+.info:hover {
+    border-color:silver;
+    box-shadow: 0 0 4px 2px silver;
+}
+
+.skip {
+    display: block;
+    position: relative;
+    background-color: cadetblue;
+    margin: 50px auto;
+    color: aliceblue;
+    width: 100%;
+    max-width: 100%;
+    height: 50px;
+    padding: 10px;
+    font-style: italic;
+    font-weight: bold;
+    font-size: large;
+    border: 2px solid purple;
+    border-radius: 20px;
+    text-align: center;   /* center button text */
+    transition: 
+    background-color 200ms ease
+    ;
+}
+
+.skip:hover {
+    background-color: rgb(3, 131, 136);
+}
+
+#next {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px auto;
+    width: 100%;
+    max-width: 100%;
+    height: 50px;
+    border-radius: 20px;
+    border: 3px outset purple;
+    background-color:rgb(166, 182, 210);
+    color:orange; 
+    text-align: center;
+    transition: 
+    background-color 200ms ease
+    ;
+}
+
+#next:hover {
+    background-color: rgb(116, 149, 204);
+}
+
+.layout {
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px;
+}
+
+.title {
+    margin: 5px auto;
+}
+
+.date {
+    margin: 0px auto;
+}
+
+.head_rating {
+    top: auto;
+    left: auto;
+    font-size: 28px;
+    font-style: italic;
+    white-space: nowrap;
+    font-weight: bold;
+    text-shadow: 0px 0px 6px orange;
+    color: orange;
+}
+
+.rating {
+    top: auto;
+    left: auto;
+    font-size: 24px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: rgb(0, 213, 255);
+    margin: 0px auto;
+}
+
+.change {
+    top: auto;
+    left: auto;
+    font-size: 20px;
+    white-space: nowrap;
+    font-weight: bold;
+    margin: 10px auto;
+}
+
+.wins {
+    top: auto;
+    left: auto;
+    font-size: 20px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: rgb(219, 0, 212);
+    margin: 10px auto;
+}
+
+.losses {
+    top: auto;
+    left: auto;
+    font-size: 20px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: rgb(219, 0, 0);
+    margin: 10px auto;
+}
+
+.divider {
+    display: none;
+    width: 75%;
+    height: 1px;
+    margin: 10px 0;
+    background-color: rgb(62, 4, 236);;
+    box-shadow: 0 0 5px 2px rgb(62, 4, 236);
+    border-radius: 16px;
+}
+
+.d1, .d2 {
+    display: none;
+    width: 75%;
+    height: 1px;
+    margin: 10px auto;
+    background-color: gold;
+    box-shadow: 0 0 5px 2px gold;
+    border-radius: 16px;
+}
+
+.poster.dim {                                 /* darken without blending */
+  filter: brightness(25%) contrast(110%);
+}
+
+.round {
+    position: absolute;
+    background-image: linear-gradient(90deg, #ed8b1a, #e20808);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    width: fit-content;
+    font-size: 48px;
+    font-weight: bold;
+    line-height: 60px;
+    text-align: center;
+    left: 0;
+    top: 10%;
+}
+
+.win_streak {
+    position: absolute;
+    background-image: linear-gradient(90deg, #ed8b1a, #d308e2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    width: fit-content;
+    font-size: 34px;
+    font-weight: lighter;
+    line-height: 60px;
+    text-align: center;
+    left: 0;
+    top: 50%;
+    font-family: fantasy;
+}
+
+.restart, .exit a{
+    display: block;
+    border: 2px inset purple;
+    border-radius: 20px;
+    background-color: #2a3c5d;
+    width: fit-content;
+    padding: 15px 45px 15px 45px; 
+    transition: 
+    background-color 200ms ease;
+    color: aliceblue;
+    text-decoration: none;
+}
+
+.restart:hover, .exit a:hover {
+    background-color:#111c33; 
+}
+
+.restart {
+    display: none;
+    position: absolute;
+    bottom: 2%;
+    left: 20%;
+}
+
+.exit {
+    display: none;
+    position: absolute;
+    text-decoration: none;
+    bottom: 2%;
+    right: 20%;
+}
+
+
+
+.champ {
+    display: none;
+    position: absolute;
+    padding: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    font-size: 28px;
+    width: fit-content;
+    text-align: center;
+    background-image: linear-gradient(90deg, yellow, gold, goldenrod);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 25px;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    letter-spacing: 0.05em;
+    padding: 5px;
+    text-transform: uppercase;
+    font-style: italic;
+}
+
+.record, .win_rate, .ranking {
+    display:block;
+    margin: 50px auto;
+    background-image: linear-gradient(90deg, #ed8b1a, #e20808);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 24px;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight:lighter;
+    width: fit-content;
+    padding: 0;
+    text-align: center;
+}
+
+.end {
+  display: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+}
+
+@media (max-width: 900px){
+    .wrap { width: 95%; margin: 12px auto; }
+    .game_card{
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+  .poster{
+    height: clamp(240px, 60vw, 360px);
+    width: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .arenaBlock{ 
+    width: 100%;
+    min-height: 0;
+}
+  .arena{ 
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+  .layout{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: clamp(240px, 60vw, 360px); /* must match poster height */
+    padding: 14px;
+    box-sizing: border-box;
+  }
+
+  .round, .win_streak{
+    margin: 10px auto;
+    text-align: center;
+}
+
+.head_rating {
+    font-size: 18px;
+    white-space: normal;
+}
+
+.rating, .change, .wins, .losses {
+    font-size: 16px;
+    white-space: normal;
+    margin: 0px auto;
+}
+
+.divider {
+    margin: 5px 0;
+    background-color: rgb(4, 85, 236);;
+    box-shadow: 0 0 5px 2px rgb(4, 85, 236);;
+}
+
+.skip, #next{
+    margin: 18px auto;
+    height: 46px;
+}
+}
+
+@media (max-width: 900px) {
+  .restart{ left: 10%; }
+  .exit{ right: 10%; }
+}

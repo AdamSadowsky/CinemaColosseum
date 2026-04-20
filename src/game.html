@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html lang="en" class="loading">
+    <head>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-G8PFNGW36G"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-G8PFNGW36G');
+        </script>
+        <meta charset="utf-8">
+        <title>Cinema Colosseum | Game</title>
+        <meta name="description" content="Vote in head to head movie and TV show matchups. Your picks power live community rankings, Elo-style ratings, and leaderboards in Cinema Colosseum.">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="canonical" href="https://cinemacolosseum.com/game.html">
+        <meta property="og:title" content="Cinema Colosseum | Game">
+        <meta property="og:description" content="Vote in head to head movie and TV show matchups. Your picks power live community rankings, Elo-style ratings, and leaderboards in Cinema Colosseum.">
+        <meta property="og:url" content="https://cinemacolosseum.com/game.html">
+        <meta property="og:type" content="website">
+        <link rel="icon" href="/favicon.ico">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <style>
+            html.loading body { visibility: hidden; }
+        </style>
+        <noscript>
+            <style>
+                html.loading body { visibility: visible; }
+            </style>
+        </noscript>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="discover.css">
+        <link rel="stylesheet" href="game.css">
+        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;600&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div id="header"></div>
+        <div class="wrap">
+            <div class="round"></div>
+            <div class="win_streak"></div>
+            <div class="arenaBlock" id="arenaBlock">
+                <div class="arena" id="arena"></div>
+                <button class="skip" id="skip">Skip</button>
+                <button class="restart">Restart</button>
+                <div class="exit">
+                    <a href="https://cinemacolosseum.com/">Exit</a>
+                </div>
+                <div class="champ">Your Champion</div>
+                <p class="end">Game Over<br>Play Again?</p>
+                <button id="next" style="display: none;">
+                <span class="material-icons">arrow_forward</span>
+                </button>
+            </div>
+            <template id="card_tmp">
+                <div class="game_card">
+                    <img class="poster" alt="">
+                    <div class="layout">
+                        <h1 class="head_rating" >Colosseum Rating</h1>
+                        <h3 class="rating"></h3>
+                        <div class="divider"></div>
+                        <h3 class="change"></h3>
+                        <div class="divider"></div>
+                        <h3 class="wins"></h3>
+                        <div class="divider"></div>
+                        <h3 class="losses"></h3>
+                    </div>
+                    <h3 class="title"></h3>
+                    <h3 class="date"></h3>
+                    <p class="meta"></p>
+                </div>
+            </template>
+        </div>
+        <div id="footer"></div>
+        <script src='script.js' defer></script>
+        <script src='includeHeader.js' defer></script>
+        <script src="game.js" defer></script>
+    </body>
+</html>
