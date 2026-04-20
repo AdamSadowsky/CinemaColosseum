@@ -1,0 +1,106 @@
+#info {
+    width: min(1400px, calc(100% - 32px));
+    margin: 0 auto;
+}
+
+.cinema_card {
+    display: flex;
+    background-color: rgb(41, 54, 66);
+    margin: 50px auto;
+    border-radius: 16px;
+    height: clamp(420px, 70vh, 600px);
+    width: min(1400px, calc(100% - 32px));
+    padding: 50px 25px; 
+    gap: 25px;   
+}
+
+.poster, .layout, .scoreCard {
+    position: relative;
+    background-color: rgb(58, 71, 83);
+    border-radius: 16px;
+    margin: 10px 0;      
+    width: auto;    
+    flex: 1;        
+    min-width: 0;
+    border: 2px solid transparent;
+    transition: 
+    box-shadow 200ms ease,
+    border-color 200ms ease,
+    transform 200ms ease;
+    will-change: transform;
+}
+
+.poster:hover {
+    border-color: #ff0000;
+    box-shadow: 0 0 10px 2px #ff0000;
+    transform: translateY(-4px) scale(1.01);
+}
+
+.layout:hover {
+    border-color: white;
+    box-shadow: 0 0 10px 2px #ffffff;
+    transform: translateY(-4px) scale(1.01);
+}
+
+.scoreCard:hover {
+    border-color: rgb(62, 4, 236);
+    box-shadow: 0 0 10px 2px rgb(62, 4, 236);
+    transform: translateY(-4px) scale(1.01);
+}
+
+.cinema_title, .date {
+    display: block;
+    color: whitesmoke;
+    font-weight: bold;
+    text-align: center;
+    margin: 25px auto;
+}
+
+.desc {
+    text-align: center;
+    margin: 25px 25px 25px;
+    color: whitesmoke;
+}
+
+.rating, .wins, .losses {
+    text-align: center;
+    line-height: 50px;
+}
+
+.rating {
+    background-image: linear-gradient(90deg, #e79639, #e20808);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.wins {
+    background-image: linear-gradient(90deg, #89e1fb, #6200ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.losses {
+    background-image: linear-gradient(90deg, #e65e5e, #9c0000);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.divider {
+    width: 75%;
+    height: 1px;
+    margin: 0px auto;
+    background-color: rgb(62, 4, 236);;
+    box-shadow: 0 0 5px 2px rgb(62, 4, 236);
+    border-radius: 16px;
+}
+
+@media (max-width: 900px){
+  .cinema_card{
+    flex-direction: column;
+    height: auto;
+    padding: 24px 16px;
+  }
+}
