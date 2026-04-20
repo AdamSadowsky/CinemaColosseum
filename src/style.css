@@ -1,0 +1,505 @@
+body {
+    background-color: #0a1629;
+    margin: 0;
+}
+
+#header {
+    display: block;
+    position: relative;
+}
+
+.nav_bar {
+    display: flex;
+    position: sticky;
+    align-items: center;
+    top: 0;
+    z-index: 99;
+    width: 100%;
+    padding: 0px;
+    margin: 0;
+    background-color: #0a1629;
+    border-bottom: 2px solid rgb(10, 10, 63);
+}
+
+.head {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.head a {
+    display: block;
+    margin: auto 25px;
+    padding: 5px;
+    width: fit-content;
+    text-align: center;
+    font-size: 30px;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight:lighter;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    background-image: linear-gradient(90deg, #ed8b1a, #e20808);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1;
+}
+
+.head a span {
+    display: block;
+    color: whitesmoke;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: Source Sans Pro, Arial, sans-serif;
+    line-height: 1;
+    margin-top: 8px;
+}
+
+.head > *:not(.header_bg) {
+    position: relative;
+    z-index: 1;
+}
+
+.nav_bar .nav_wrap a {
+    margin: auto 25px;
+    width: 100%;
+    height: 100%;
+    color: cornsilk;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
+    font-style: italic;
+    font-weight: bold;
+    transition: 
+    color 200ms ease-in-out,
+    text-decoration 200ms ease-in-out;
+    text-decoration: transparent;
+}
+
+.nav_wrap a:is(:hover) {
+    color: purple;
+    text-decoration:underline;
+    text-decoration-color: purple ;
+}
+
+.search_bg {
+    position: relative;
+    width: 100%;
+    padding-top: 150px;
+    padding-bottom: 35px;
+}
+
+.search_bg::before {
+    content: "";
+    position: absolute;
+    background: rgba(10, 15, 30, .50);
+    pointer-events: none;
+    inset: 0;
+    z-index: 1;
+}
+
+.search_bg .hover_poster {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.top_nav {
+    position: relative;
+    width: 100%;
+}
+
+.search_container {
+    position: relative;
+    width: 50%;
+    margin: 0 auto;
+    z-index: 1;
+}
+
+.search_container input {
+    position: relative;
+    display: block;
+    margin-top: 85px;
+    background-color: rgba(10,15,25,0.75);
+    backdrop-filter: blur(60px);
+}
+
+.guide {
+    background-color: #111c33;
+    margin: 20px auto;
+    border: 2px solid purple;
+    border-radius: 20px;
+    color: aliceblue;
+    text-align: center;
+    font-size: 17px;
+    line-height: normal;
+    white-space: normal;
+    width: min(700px, calc(100% - 32px));
+}
+
+.guide h2 {
+    background-image: linear-gradient(90deg, orange, orangered);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.list {
+  display: table;        
+  margin: 10px auto;      
+  text-align: left;       
+  list-style-position: inside;
+}
+
+.selection {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 60px;
+    margin: 0 auto 100px;
+    width: min(1400px, calc(100% - 32px));
+}
+
+.modes_head, .rounds_head, .genre_head, .popularity_head, .year_head {
+  display: grid;
+  position: relative;
+  width: 100%;
+  grid-template-columns: 140px minmax(0, 1fr);
+  column-gap: 16px;
+  margin-top: 18px;
+  align-items: center;
+}
+
+.modes_head p, .rounds_head p, .genre_head p, .popularity_head p {
+    font-size: large;
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    color:cornsilk;
+    width: 75px;
+}
+
+input {
+    background-color:#1a2437;
+    border: 1px solid purple ;
+    border-radius: 16px;
+    padding: 16px;
+    width: 75%;
+    color: aliceblue;
+    margin: 0px auto;
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    color:whitesmoke;
+}
+
+.dropdown_bttn{
+    position: relative;
+    background-color:#1a2437;
+    color:aliceblue;
+    border: 2px inset purple;
+    border-radius: 20px;
+    text-align: center;
+    padding: 15px 0px 15px 0px;
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-size: 14px;
+    cursor: pointer;
+    width: 100%;
+    margin: 0;
+    justify-self: stretch;
+    transition: 
+    background-color 200ms ease;
+    will-change: transform;
+}
+
+.modes_dropdown, .rounds_dropdown, .genre_dropdown, .popularity_dropdown {
+    position: absolute;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none; 
+    background-color: #111c33;
+    left: auto;
+    right: 0;
+    width: min(400px, 100%);
+    top: calc(100% + 8px);
+    text-align: center;
+    overflow-y:auto;
+    max-height: 150px;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    border: 2px solid purple;
+    z-index: 1;
+}
+
+.hint {
+    display: none;
+}
+
+.hint b {
+    color: purple;
+    font-size: 18px;
+}
+
+.modes_head:has(.dropdown_item#mode1d:hover) .hint#mode1, .modes_head:has(.dropdown_item#mode2d:hover) .hint#mode2,
+.popularity_head:has(.dropdown_item#beginner1:hover) .hint#beginner, .popularity_head:has(.dropdown_item#intermediate2:hover) .hint#intermediate,
+.popularity_head:has(.dropdown_item#critic3:hover) .hint#critic, .popularity_head:has(.dropdown_item#connoisseur4:hover) .hint#connoisseur,
+.popularity_head:has(.dropdown_item#gladiator5:hover) .hint#gladiator {
+    display: inline-block;
+    position: absolute;
+    background-color: #111c33;
+    padding: 12px 15px 15px;
+    left: 100%;
+    right: 0;
+    width: min(200px, 100%);
+    top: calc(100% + 8px);
+    max-height: 100px;
+    z-index: 1;
+    border: 2px inset purple;
+    border-radius: 16px;
+}
+
+.card:has(.dropdown_item:hover) {
+    z-index: 3;
+}
+
+.dropdown_item{
+    padding: 12px 15px 15px;
+}
+
+
+.dropdown_item:focus-within, .dropdown_item:hover{
+    background-color:purple;
+    border: 2px solid white;
+}
+
+.dropdown_bttn:is(:hover, :focus) {
+    background-color: #111c33;
+}
+
+.dropdown_bttn:is(:focus) + .modes_dropdown, .dropdown_bttn:is(:focus) + .rounds_dropdown, .dropdown_bttn:is(:focus) + .genre_dropdown, .dropdown_bttn:is(:focus) + .popularity_dropdown, .dropdown_bttn:is(:focus) + .leaderboard_dropdown,  .modes_dropdown:hover, .rounds_dropdown:hover, .genre_dropdown:hover, .popularity_dropdown:hover, .leaderboard_dropdown:hover  {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.options {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    border: 3px inset purple;
+    border-radius: 8px;
+    background-color:#1a2437;
+    width:150px;
+    height: 75px;
+    justify-self: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 28px;
+    transition: 
+    background-color 300ms ease;
+    will-change: transform;
+}
+
+.options_label {
+    display: inline-block;
+    background-image: linear-gradient(90deg, #6b1aed, #be0000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+}
+
+.card {
+    position: relative;
+    border: 1px solid transparent;
+    aspect-ratio: 4/5;
+    transition: 
+    border 200ms ease,
+    box-shadow 200ms ease;
+    will-change: transform;
+    z-index: 0;
+    margin: 0;
+}
+
+.card h1 {
+    margin: 0px;
+    font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    color:cornsilk;
+}
+
+#movie_card:hover h1, #tv_card:hover h1 {
+    opacity: 0;
+}
+
+.card .hover_poster {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    z-index: 0;
+    border-radius: 20px;
+    transition: opacity 0.5s ease;
+    will-change: transform;
+}
+
+.card:hover .hover_poster {
+    opacity: 0.5;
+}
+
+.card:hover .options {
+    background: rgba(10, 15, 30, .75);
+}
+
+.card:hover .options:is(:hover) {
+    background: rgba(10, 15, 30, .95);
+}
+
+.card > *:not(.hover_poster) {
+    z-index: 1;
+}
+
+.card:hover {
+    border-color:purple;
+    box-shadow: 0 0 12px 1px purple;
+}
+
+#footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    background-color: #0a1629;
+}
+
+#footer a {
+    margin: 0 20px;
+    text-decoration: none;
+    color: whitesmoke;
+    font-size: 16px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+
+img { max-width: 100%; height: auto; }
+
+@media (max-width: 700px) {
+
+    #settings.card {
+        aspect-ratio: auto; /* or: unset; */
+    }
+  #footer{
+    flex-wrap: wrap;
+    gap: 5px 18px;      
+    padding: 8px;
+  }
+
+  #footer a{
+    margin: 0;       
+  }
+
+  .nav_bar{
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 8px 10px;
+  }
+
+  .head{
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .head a{
+    margin: 6px 0;
+    font-size: clamp(24px, 7vw, 34px);
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .head a span{
+    font-size: 11px;
+    margin-top: 6px;
+  }
+
+  .nav_wrap{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    padding: 6px 0 10px;
+  }
+
+  .nav_bar .nav_wrap a{
+    margin: 0;
+    width: auto;
+    font-size: 16px;
+  }
+
+  .search_bg{
+    padding-top: 90px;
+    padding-bottom: 20px;
+  }
+
+  .search_container{
+    width: min(92vw, 520px);
+  }
+
+  .search_container input{
+    width: 100%;
+    margin-top: 30px;
+  }
+
+  .guide{
+    padding: 8px 12px;
+    font-size: 16px;
+  }
+
+  .selection{
+    grid-template-columns: 1fr;
+    gap: 10px 20px;
+  }
+
+
+  /* Each row like "Genres / Popularity / Mode / Rounds" */
+  .modes_head, .rounds_head, .genre_head, .popularity_head{
+    grid-template-columns: 1fr;
+    column-gap: 0;
+    row-gap: 10px;
+    margin-top: 24px;
+  }
+
+  .modes_head p, .rounds_head p, .genre_head p, .popularity_head p{
+    width: auto;
+    text-align: left;
+  }
+
+  .modes_dropdown, .rounds_dropdown, .genre_dropdown, .popularity_dropdown{
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  /* Hint tooltips (these break mobile layouts hard) */
+  .hint{ display: none !important; }
+}
+
+#settings .settings_card {
+  height: 100%;
+  padding: 0 18px 24px;
+  box-sizing: border-box;
+}
+
+#settings .warning {
+  font-size: 13px;
+  line-height: 1.2;
+  text-wrap: balance;
+  color: purple;
+}
+
+.selection > .card {
+  min-width: 0;
+  min-height: 0;
+}
