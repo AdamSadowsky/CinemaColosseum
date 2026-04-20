@@ -48,12 +48,13 @@
                     <div class="dropdown_item" data-value="tv">TV</div>
                 </div>
             </div>
-            <div id="leaderboardRow"></div>
+            <p class="leaderboard_status" id="leaderboardStatus" role="status" hidden></p>
+            <div id="leaderboardRow" aria-live="polite"></div>
                 <template id="tmp">
                     <div class="row">
                         <div class="rank"></div>
                         <div class="divider"></div>
-                        <img class="poster">
+                        <img class="poster" alt="">
                         <div class="title_date_wrap">
                             <div class="title"></div>
                             <div class="date"></div>

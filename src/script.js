@@ -1,80 +1,105 @@
-const popularity_dropdown = document.querySelector('.popularity_dropdown');
-const popularity_default = popularity_dropdown?.dataset.default;
+const GAME_DROPDOWN_SELECTOR = '.genre_dropdown, .popularity_dropdown, .modes_dropdown, .rounds_dropdown';
+const DROPDOWN_PLACEHOLDER = 'Please select an option below';
+const DROPDOWN_SELECTORS = {
+    genre: '.genre_dropdown',
+    modes: '.modes_dropdown',
+    popularity: '.popularity_dropdown',
+    rounds: '.rounds_dropdown',
+};
 
-const modes_dropdown = document.querySelector('.modes_dropdown');
-const modes_default = modes_dropdown?.dataset.default;
+document.addEventListener('click', (event) => {
+    const item = event.target.closest?.('.dropdown_item');
+    const container = item?.closest(GAME_DROPDOWN_SELECTOR);
 
-const rounds_dropdown = document.querySelector('.rounds_dropdown');
-const rounds_default = rounds_dropdown?.dataset.default;
-//Determines if the clicked item belongs to a genre and assigns the container 
-document.querySelectorAll('.dropdown_item').forEach(item => {
-    item.addEventListener('click', () => {
-        const container = item.closest('.genre_dropdown, .popularity_dropdown, .modes_dropdown, .rounds_dropdown');//dropdown menu
-        if(!container) return;
-        const isGenre = container.classList.contains('genre_dropdown');
-        container.classList.add('selected');//Marks containers as active
+    if(!item || !container) {
+        return;
+    }
 
-        //For genre it joins previously selection with new selection if unique else it is deselected
-        if(isGenre) {
-            item.classList.toggle('selected');
-        } else {
-            const alreadySelected = item.classList.contains('selected')
-            container.querySelectorAll('.dropdown_item.selected').forEach(el => el.classList.remove('selected'))
-            if(!alreadySelected) {
-                item.classList.add('selected')
-            }
+    updateDropdownSelection(container, item);
+});
+
+document.querySelectorAll('.options').forEach(button => {
+    button.addEventListener('click', () => {
+        const genre = getSelectedValues(document.querySelector(DROPDOWN_SELECTORS.genre));
+        const type = getMediaType(button);
+
+        if(genre.length === 0) {
+            alert(`Must select a ${type} genre`);
+            return;
         }
-        const selectedType = [...container.querySelectorAll('.dropdown_item.selected')].map(el => (el.dataset.value ?? el.textContent).trim())
-        const btn = container.previousElementSibling;
-        btn.textContent = selectedType.length ? selectedType.join(', '): 'Please select an option below';
-        
+
+        start(
+            type,
+            genre,
+            getDropdownValue('modes'),
+            getDropdownValue('popularity'),
+            getDropdownValue('rounds')
+        );
     });
 });
 
-//All dropdown menus
-const startBttn = document.querySelectorAll('.options');
+function updateDropdownSelection(container, item) {
+    if(container.classList.contains('genre_dropdown')) {
+        item.classList.toggle('selected');
+    } else {
+        const alreadySelected = item.classList.contains('selected');
+        container.querySelectorAll('.dropdown_item.selected').forEach(selectedItem => {
+            selectedItem.classList.remove('selected');
+        });
 
-//Finds type and checks for inappropriate inputs
-//Determines category and passes itself and type to start fucntion
-startBttn.forEach(bttn => {
-    bttn.addEventListener('click', () => {
-        const id = bttn.id;
-        const genre = [...document.querySelectorAll('.genre_dropdown .dropdown_item.selected')].map(el => (el.textContent).trim());
-        const modesEl = document.querySelector('.modes_dropdown .dropdown_item.selected');
-        const modes = ((modesEl?.dataset.value ?? modesEl?.textContent) || modes_default).trim();
-        const popularityEl = document.querySelector('.popularity_dropdown .dropdown_item.selected')
-        const popularity = ((popularityEl?.dataset.value ?? popularityEl?.textContent) || popularity_default).trim();
-        const roundsEl = document.querySelector('.rounds_dropdown .dropdown_item.selected');
-        const rounds = ((roundsEl?.dataset.value ?? roundsEl?.textContent) || rounds_default).trim();
-        if(id === 'movies_genre' && genre.length === 0){
-            alert("Must select a movie genre");
-            return;
-        } else if(id === 'tv_genre' && genre.length === 0){
-            alert("Must select a tv genre");
-            return;
+        if(!alreadySelected) {
+            item.classList.add('selected');
         }
-    const type = id.includes('movie') ? 'movie' : 'tv';
-    start(type, genre, modes, popularity, rounds);
-    });
-});
+    }
+
+    const selectedValues = getSelectedValues(container);
+    const button = container.previousElementSibling;
+
+    container.classList.toggle('selected', selectedValues.length > 0);
+
+    if(button) {
+        button.textContent = selectedValues.length ? selectedValues.join(', ') : DROPDOWN_PLACEHOLDER;
+    }
+}
+
+function getSelectedValues(container) {
+    if(!container) {
+        return [];
+    }
+
+    return [...container.querySelectorAll('.dropdown_item.selected')]
+        .map(getItemValue)
+        .filter(Boolean);
+}
+
+function getDropdownValue(name) {
+    const container = document.querySelector(DROPDOWN_SELECTORS[name]);
+    return getSelectedValues(container)[0] || container?.dataset.default || '';
+}
+
+function getItemValue(item) {
+    return (item?.dataset.value ?? item?.textContent ?? '').trim();
+}
+
+function getMediaType(button) {
+    return button.id.includes('movie') ? 'movie' : 'tv';
+}
 
 function start(type, genre, modes, popularity, rounds){
     const url = new URL('/game', window.location.href);
     url.searchParams.set('type', type === 'movie' ? 'movie' : 'tv');
-    if(Array.isArray(genre)){
-        genre.forEach(g => url.searchParams.append('genre', g));
-    } else {
-        url.searchParams.set('genre', genre);
-    }
+    const genres = Array.isArray(genre) ? genre : [genre];
+
+    genres.filter(Boolean).forEach(g => url.searchParams.append('genre', g));
     url.searchParams.set('modes', modes);
     url.searchParams.set('popularity', popularity);
     url.searchParams.set('rounds', rounds);
-    window.location.href = url.toString();
+    window.location.assign(url);
 }
 
 const MOVIE_POSTERS = [
     { title: "The Shawshank Redemption", poster: "https://media.themoviedb.org/t/p/w600_and_h900_face/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg"},
-    { title: "Forest Gump", poster: "https://media.themoviedb.org/t/p/w600_and_h900_face/saHP97rTPS5eLmrLQEcANmKrsFl.jpg"}, 
+    { title: "Forrest Gump", poster: "https://media.themoviedb.org/t/p/w600_and_h900_face/saHP97rTPS5eLmrLQEcANmKrsFl.jpg"}, 
     { title: "Pulp Fiction", poster: "https://media.themoviedb.org/t/p/w116_and_h174_face/vQWk5YBFWF4bZaofAbv0tShwBvQ.jpg"}, 
     { title: "Goodfellas", poster: "https://media.themoviedb.org/t/p/w600_and_h900_face/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg"}, 
     { title: "The Matrix", poster: "https://media.themoviedb.org/t/p/w600_and_h900_face/qK76PKQLd6zlMn0u83Ej9YQOqPL.jpg"}, 
@@ -154,30 +179,99 @@ setUpHoverPoster('#backdrop', MOVIE_BACKDROP);
 
 function setUpHoverPoster(cardSelector, posters) {
     const card = document.querySelector(cardSelector);
-    if(!card) {
+
+    if(!card || !posters?.length) {
         return;
     }
+
+    const img = getPosterImage(card);
+
+    if(card.id === 'backdrop') {
+        setBackdropImage(img, getRandomItem(posters));
+        return;
+    }
+
+    let currentPoster = null;
+    let nextPoster = getRandomItem(posters);
+    let nextPosterReady = preloadPoster(nextPoster.poster);
+    let hoverRequestId = 0;
+
+    img.style.opacity = '0';
+    setHoverPoster(img, nextPoster);
+
+    card.addEventListener("mouseenter", async () => {
+        const requestId = ++hoverRequestId;
+        const posterToShow = nextPoster;
+
+        await nextPosterReady;
+
+        if(requestId !== hoverRequestId || !card.matches(':hover')) {
+            return;
+        }
+
+        currentPoster = posterToShow;
+        setHoverPoster(img, currentPoster);
+        img.style.opacity = '0.5';
+
+        nextPoster = getRandomItem(posters, currentPoster);
+        nextPosterReady = preloadPoster(nextPoster.poster);
+    });
+
+    card.addEventListener("mouseleave", () => {
+        hoverRequestId++;
+        img.style.opacity = '0';
+    });
+}
+
+function getPosterImage(card) {
     let img = card.querySelector('.hover_poster');
+
     if(!img) {
         img = document.createElement('img');
         img.className = 'hover_poster';
         card.prepend(img);
     }
-    if(posters === MOVIE_BACKDROP) {
-        const random = posters[Math.floor(Math.random() * posters.length)];
-        const size = isMobile() ? 'w780' : 'w1280';
-        img.loading = 'eager';
-        img.decoding = 'async';
-        img.fetchPriority = 'high';
-        img.src = tmdbSize(random.poster, size);
-        img.style.objectPosition = random.pos;
-        return;
+
+    if(!img.hasAttribute('alt')) {
+        img.alt = '';
     }
-    card.addEventListener("mouseenter", () => {
-        const random = posters[Math.floor(Math.random() * posters.length)];
-        img.src = random.poster;
-        img.alt = random.title || random.name || '';
+
+    return img;
+}
+
+function setHoverPoster(img, poster) {
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.src = poster.poster;
+    img.alt = poster.title || poster.name || '';
+}
+
+function preloadPoster(src) {
+    return new Promise(resolve => {
+        const preload = new Image();
+        preload.onload = resolve;
+        preload.onerror = resolve;
+        preload.src = src;
     });
+}
+
+function setBackdropImage(img, backdrop) {
+    const size = isMobile() ? 'w780' : 'w1280';
+
+    img.loading = 'eager';
+    img.decoding = 'async';
+    img.fetchPriority = 'high';
+    img.src = tmdbSize(backdrop.poster, size);
+    img.alt = '';
+    img.style.objectPosition = backdrop.pos || '50% 50%';
+}
+
+function getRandomItem(items, excludedItem = null) {
+    const options = items.length > 1 && excludedItem
+        ? items.filter(item => item !== excludedItem)
+        : items;
+
+    return options[Math.floor(Math.random() * options.length)];
 }
 
 function tmdbSize(url, size) {
