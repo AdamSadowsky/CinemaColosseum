@@ -7,10 +7,41 @@ axios.defaults.timeout = 8000;
 const cookieParser = require("cookie-parser");
 const crypto = require("crypto");
 const { rateLimit, ipKeyGenerator } = require("express-rate-limit");
-const isProd = process.env.NODE_ENV === "production";
 const helmet = require("helmet");
 app.disable("x-powered-by");
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(helmet({
+  contentSecurityPolicy: {
+    useDefaults: true,
+    directives: {
+      defaultSrc: ["'self'"],
+      baseUri: ["'self'"],
+      connectSrc: [
+        "'self'",
+        "https://www.google-analytics.com",
+        "https://region1.google-analytics.com",
+        "https://stats.g.doubleclick.net"
+      ],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      formAction: ["'self'"],
+      frameAncestors: ["'self'"],
+      imgSrc: [
+        "'self'",
+        "data:",
+        "https://image.tmdb.org",
+        "https://media.themoviedb.org",
+        "https://www.themoviedb.org",
+        "https://www.google-analytics.com",
+        "https://*.google-analytics.com",
+        "https://stats.g.doubleclick.net"
+      ],
+      objectSrc: ["'none'"],
+      scriptSrc: ["'self'", "https://www.googletagmanager.com"],
+      scriptSrcAttr: ["'none'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+    }
+  },
+  referrerPolicy: { policy: "strict-origin-when-cross-origin" }
+}));
 app.use(express.json({ limit: "10kb" }));
 app.use((req, res, next) => {
   if (req.url.length > 2048) return res.status(414).send("URI Too Long");
@@ -41,6 +72,66 @@ app.use(express.static("public", {
   index: ["index.html"]   // / -> /index.html
 }));
 
+const getRequestOrigin = (req) => {
+  const forwardedProto = req.headers["x-forwarded-proto"];
+  const proto = typeof forwardedProto === "string" && forwardedProto.length
+    ? forwardedProto.split(",")[0].trim()
+    : (req.secure ? "https" : req.protocol);
+
+  return `${proto}://${req.headers.host}`;
+};
+
+const parseUrl = (value) => {
+  try {
+    return new URL(value);
+  } catch {
+    return null;
+  }
+};
+
+const isLoopbackHost = (hostname) => {
+  const normalized = String(hostname || "").toLowerCase();
+  return normalized === "localhost" || normalized === "127.0.0.1" || normalized === "::1" || normalized === "[::1]";
+};
+
+const isAllowedOrigin = (candidate, expectedOrigin) => {
+  const candidateUrl = parseUrl(candidate);
+  const expectedUrl = parseUrl(expectedOrigin);
+
+  if(!candidateUrl || !expectedUrl) {
+    return false;
+  }
+
+  if(candidateUrl.origin === expectedUrl.origin) {
+    return true;
+  }
+
+  return candidateUrl.protocol === expectedUrl.protocol
+    && candidateUrl.port === expectedUrl.port
+    && isLoopbackHost(candidateUrl.hostname)
+    && isLoopbackHost(expectedUrl.hostname);
+};
+
+const requireSameOrigin = (req, res, next) => {
+  const fetchSite = req.headers["sec-fetch-site"];
+  if(fetchSite === "cross-site") {
+    return res.status(403).json({ error: "cross-site requests are not allowed" });
+  }
+
+  const requestOrigin = getRequestOrigin(req);
+  const originHeader = req.headers.origin;
+  if(originHeader && !isAllowedOrigin(originHeader, requestOrigin)) {
+    return res.status(403).json({ error: "invalid origin" });
+  }
+
+  const refererHeader = req.headers.referer;
+  if(!originHeader && refererHeader && !isAllowedOrigin(refererHeader, requestOrigin)) {
+    return res.status(403).json({ error: "invalid referer" });
+  }
+
+  next();
+};
+
 const keysFromReq = (req) => {
   const sid = req.signedCookies?.sid;
   if (typeof sid === "string" && sid.length) return sid;
@@ -57,8 +148,17 @@ const SID_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
 app.use((req, res, next) => {
   let sid = req.signedCookies?.sid;
   if(!sid) {
-    sid = crypto.randomUUID()
-    res.cookie("sid", sid, { httpOnly: true, sameSite: "Lax", signed: true, maxAge: SID_MAX_AGE, secure: isProd, path: '/' });
+    sid = crypto.randomUUID();
+    const forwardedProto = req.headers["x-forwarded-proto"];
+    const isSecureRequest = req.secure || (typeof forwardedProto === "string" && forwardedProto.split(",")[0].trim() === "https");
+    res.cookie("sid", sid, {
+      httpOnly: true,
+      sameSite: "Lax",
+      signed: true,
+      maxAge: SID_MAX_AGE,
+      secure: isSecureRequest,
+      path: '/'
+    });
   }
   req.sid = sid;
   next();
@@ -197,8 +297,13 @@ app.get('/api/discover', discoverLimiter, async (req, res) => {
 
 app.get('/api/search', searchLimiter, async (req, res) => {
   try {
+    const query = typeof req.query.query === "string" ? req.query.query.trim() : "";
+    if(!query || query.length > 120) {
+      return res.status(400).json({ error: "query must be 1-120 characters" });
+    }
+
     const { data } = await axios.get('https://api.themoviedb.org/3/search/multi', {
-      params: { api_key: KEY, query: req.query.query }
+      params: { api_key: KEY, query }
     });
 
     const filtered = (data.results || []) .filter(m => (m.vote_count || 0) >= 200)
@@ -210,26 +315,26 @@ app.get('/api/search', searchLimiter, async (req, res) => {
   }
 });
 
-  app.get('/pair', pairLimiter, async (req, res) => {
+  app.post('/pair', pairLimiter, requireSameOrigin, async (req, res) => {
     try {
-      const type = req.query.type === 'movie' ? 'movie' : 'tv'; 
-      const popularity = req.query.popularity;
-      let championId = req.query.champion_id;
+      const type = req.body?.type === 'movie' ? 'movie' : 'tv'; 
+      const popularity = req.body?.popularity;
+      let championId = req.body?.champion_id;
       championId = (championId === null || championId === undefined || championId === '') ? null : Number(championId);
-      if(championId !== null && !Number.isInteger(championId)) {
+      if(championId !== null && (!Number.isInteger(championId) || championId <= 0)) {
         championId = null;
       }
 
-      const excludeRaw = typeof req.query.exclude === "string" ? req.query.exclude : "";
-      if (excludeRaw.length > 2000) {
-        return res.status(400).json({ error: "exclude too long" });
+      const excludeValues = Array.isArray(req.body?.exclude)
+        ? req.body.exclude
+        : (typeof req.body?.exclude === "string" ? req.body.exclude.split(",") : []);
+      if(excludeValues.length > 200) {
+        return res.status(400).json({ error: "exclude is too large" });
       }
 
       const used = new Set(
-        excludeRaw
-        .split(',')
+        excludeValues
         .slice(0, 200)
-        .filter(Boolean)
         .map(x => Number(x))
         .filter(Number.isInteger)
       );
@@ -267,8 +372,8 @@ app.get('/api/search', searchLimiter, async (req, res) => {
       page: 1
     };
 
-      if(req.query.genre){
-        const names = Array.isArray(req.query.genre) ? req.query.genre : [req.query.genre];
+      if(req.body?.genre){
+        const names = Array.isArray(req.body.genre) ? req.body.genre : [req.body.genre];
         const ids= [];
       for(const raw of names){
         const name = String(raw).trim();
@@ -452,7 +557,7 @@ app.get('/api/search', searchLimiter, async (req, res) => {
       }
   });
 
-  app.post('/vote', voteLimiter, async (req, res) => {
+  app.post('/vote', voteLimiter, requireSameOrigin, async (req, res) => {
     try {
       const pair_id = req.body.pair_id;
       const winner_id = Number(req.body.winner_id);
@@ -511,16 +616,18 @@ app.get('/api/search', searchLimiter, async (req, res) => {
   app.get('/details', detailsLimiter, async (req, res) => {
     try {
       const type = req.query.type === 'movie' ? 'movie' : 'tv';
-      const id = req.query.id;
+      const id = Number(req.query.id);
+      if(!Number.isInteger(id) || id <= 0) {
+        return res.status(400).json({ error: 'ID must be a positive integer' });
+      }
 
-      const key = `${type}|${id}`;
       const nowIso = new Date().toISOString();
 
       const { data: cache, error: cacheReadError } = await supabase
         .from('cinema_titles_cache')
         .select('results')
         .eq('type', type)
-        .eq('tmdb_id', id)
+          .eq('tmdb_id', id)
         .gt('expires_at', nowIso)
         .maybeSingle();
 
@@ -567,8 +674,8 @@ app.get('/api/search', searchLimiter, async (req, res) => {
       const type = req.query.type === 'movie' ? 'movie' : 'tv';
       const id = Number(req.query.id);
 
-      if(!Number.isInteger(id)) {
-        return res.status(400).json({ error: 'ID must be an integer'});
+      if(!Number.isInteger(id) || id <= 0) {
+        return res.status(400).json({ error: 'ID must be a positive integer' });
       }
       const { data, error } = await supabase.rpc('get_rating', {
         p_type: type,
@@ -582,9 +689,9 @@ app.get('/api/search', searchLimiter, async (req, res) => {
           details: error.details,
           hint: error.hint,
         });
-        return res.status(500).json({ erorr: 'get rating failed'});
+        return res.status(500).json({ error: 'get rating failed' });
       }
-      return res.json(data[0]);
+      return res.json(data?.[0] || { rating: 1000, wins: 0, losses: 0 });
     } catch(err) {
       console.error(err);
       res.status(500).json({ error: 'failed'});

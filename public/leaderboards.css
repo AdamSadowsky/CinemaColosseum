@@ -47,7 +47,7 @@
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-size: 46px;
     font-weight: lighter;
-    letter-spacing: 0.05em;
+    letter-spacing: 0;
     text-decoration: none;
     background-image: linear-gradient(90deg, #ed8b1a, #e20808);
     -webkit-background-clip: text;
@@ -174,7 +174,7 @@
     color: transparent;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-size: 28px;
-    letter-spacing: 0.02em;
+    letter-spacing: 0;
 }
 
 .divider {
@@ -272,13 +272,18 @@
     }
 
     .row {
+        display: grid;
+        grid-template-columns: 52px 84px minmax(0, 1fr);
+        grid-template-areas:
+            "rank poster title"
+            "info info info";
+        column-gap: 12px;
+        row-gap: 12px;
         width: 100%;
         min-height: 0;
-        flex-wrap: wrap;
-        justify-content: center;
         padding: 14px 12px;
         border-radius: 22px;
-        gap: 10px;
+        align-items: center;
     }
 
     .rank,
@@ -294,19 +299,22 @@
     }
 
     .rank {
-        width: auto;
-        flex-basis: 100%;
+        grid-area: rank;
+        width: 52px;
         font-size: 22px;
     }
 
     .poster {
+        grid-area: poster;
         width: 84px;
         height: 126px;
     }
 
     .title_date_wrap {
-        width: calc(100% - 100px);
-        min-height: 100px;
+        grid-area: title;
+        width: auto;
+        min-height: 0;
+        height: auto;
     }
 
     .title {
@@ -319,6 +327,10 @@
     }
 
     .info_wrap {
+        grid-area: info;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
         width: 100%;
         max-width: none;
         min-width: 0;
@@ -330,12 +342,20 @@
     .win_rate {
         margin: 6px 0;
         font-size: 14px;
+        overflow-wrap: anywhere;
     }
 }
 
 @media (max-width: 480px) {
     .row {
+        grid-template-columns: 44px 74px minmax(0, 1fr);
+        column-gap: 10px;
         border-radius: 18px;
+    }
+
+    .rank {
+        width: 44px;
+        font-size: 20px;
     }
 
     .poster {
@@ -343,7 +363,11 @@
         height: 111px;
     }
 
-    .title_date_wrap {
-        width: calc(100% - 90px);
+    .title {
+        font-size: 18px;
+    }
+
+    .info_wrap {
+        grid-template-columns: 1fr;
     }
 }

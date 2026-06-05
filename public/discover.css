@@ -1,0 +1,40 @@
+#section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(200px, 22vw, 260px), 1fr));
+    gap: 25px;
+    margin: 20px auto;
+    grid-auto-rows: 400px;
+    margin-bottom: 100px;
+    width: min(1400px, calc(100% - 32px));
+}
+
+.poster {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    border-radius: 20px;
+    opacity: 1;
+    transition: 
+    opacity 200ms ease,
+    border-color 200ms ease;
+    border: 3px solid transparent;
+}
+
+.card, .cinema_card {
+    position: relative;
+    width: 100%;
+    padding: 15px;
+    background-color: #151f30;
+    text-align: center;
+    color: aliceblue;
+}
+
+.card {
+    background: linear-gradient(90deg, #2e343f, #202a3d, #15243d);
+    border-radius: 20px;
+}
+
+.cinema_card:hover .poster {
+    opacity: .5;
+    border-color: whitesmoke;
+}

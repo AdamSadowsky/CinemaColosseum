@@ -1,5 +1,4 @@
 const IMG_PATH = 'https://image.tmdb.org/t/p/w1280';
-const SEARCHAPI = '/search?query=';
 const APILINK   = '/details';
 const params = new URLSearchParams(window.location.search);
 const type = params.get('type') === 'movie' ? 'movie' : 'tv';
@@ -20,6 +19,9 @@ function displayCinemaInfo(url){
     })
     .then(async function(data) {
         const { cinemaData: item } = data;
+        if(!item) {
+            throw new Error('Missing title data.');
+        }
         const divCard = document.createElement('div');
         divCard.classList.add('cinema_card');
         const poster = document.createElement('img');
@@ -45,19 +47,22 @@ function displayCinemaInfo(url){
         const scoreCard = document.createElement('div');
         scoreCard.classList.add('scoreCard');
         const score = await getRating({ type, id});
+        const ratingValue = formatWholeNumber(score?.rating, 1000);
+        const winsValue = formatWholeNumber(score?.wins, 0);
+        const lossesValue = formatWholeNumber(score?.losses, 0);
         const rating = document.createElement('h2');
         rating.classList.add('rating');
-        rating.innerHTML = `Colosseum Rating<br>${Number(score.rating).toFixed(0)}`;
+        rating.innerHTML = `Colosseum Rating<br>${ratingValue}`;
         const divider1 = document.createElement('div');
         divider1.classList.add('divider');
         const wins = document.createElement('h2');
         wins.classList.add('wins');
-        wins.innerHTML = `Wins<br>${Number(score.wins).toFixed(0)}`;
+        wins.innerHTML = `Wins<br>${winsValue}`;
         const divider2 = document.createElement('div');
         divider2.classList.add('divider');
         const losses = document.createElement('h2');
         losses.classList.add('losses');
-        losses.innerHTML = `Losses<br>${Number(score.losses).toFixed(0)}`;
+        losses.innerHTML = `Losses<br>${lossesValue}`;
         divCard.appendChild(poster);
         layout.appendChild(title);
         layout.appendChild(date);
@@ -80,7 +85,12 @@ function displayCinemaInfo(url){
 async function getRating({ type, id }) {
     const resp = await fetch(`/rating?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}` ,{ credentials: 'include' });
     if(!resp.ok) {
-        throw new Error('vote failed');
+        throw new Error('Failed to load rating.');
     }
     return await resp.json();
+}
+
+function formatWholeNumber(value, fallback) {
+    const number = Number(value);
+    return Number.isFinite(number) ? number.toFixed(0) : String(fallback);
 }

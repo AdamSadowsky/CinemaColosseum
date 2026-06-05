@@ -1,10 +1,12 @@
 {
   "name": "cinemacoloseum",
   "version": "1.0.0",
-  "main": "script.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "start": "node server.js",
+  "copy:public": "shx mkdir -p public && shx cp -r src/* public/",
+  "build": "npm run copy:public"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AdamSadowsky/CinemaColosseum.git"
@@ -16,11 +18,21 @@
     "url": "https://github.com/AdamSadowsky/CinemaColosseum/issues"
   },
   "homepage": "https://github.com/AdamSadowsky/CinemaColosseum#readme",
-  "description": "",
+  "description": "Cinema Colosseum",
   "dependencies": {
+    "@supabase/supabase-js": "^2.58.0",
     "axios": "^1.11.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0"
+  },
+  "devDependencies": {
+    "clean-css-cli": "^5.6.3",
+    "html-minifier-terser": "^7.2.0",
+    "shx": "^0.4.0",
+    "terser": "^5.44.1"
   }
 }

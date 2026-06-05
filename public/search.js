@@ -17,14 +17,22 @@ if(q) {
 }
 
 async function displayCinema(url) {
-    fetch(url ,{ credentials: 'include' }).then(res => 
-        {
-            if(!res.ok) throw new Error('no response found');
-            return res.json()
-        })
-    .then(function(data) {
-        console.log(data.results);
-        data?.results?.forEach(el => {
+    main.innerHTML = '';
+    try {
+        const res = await fetch(url, { credentials: 'include' });
+        if(!res.ok) {
+            throw new Error('No results could be loaded right now.');
+        }
+
+        const data = await res.json();
+        const results = Array.isArray(data?.results) ? data.results : [];
+
+        if(results.length === 0) {
+            renderDiscoverMessage('No titles matched that search.');
+            return;
+        }
+
+        results.forEach(el => {
             const divCard = document.createElement('div');
             divCard.classList.add('cinema_card');
             const divRow = document.createElement('div');
@@ -37,7 +45,7 @@ async function displayCinema(url) {
                 poster.src = IMG_PATH + el.poster_path;
             }
             poster.setAttribute('data-cinema-id', el.id);
-            poster.setAttribute('data-cinema-type', el.media_type)
+            poster.setAttribute('data-cinema-type', el.media_type || type);
 
             divCard.appendChild(poster);
             divCol.appendChild(divCard);
@@ -46,12 +54,23 @@ async function displayCinema(url) {
 
             poster.addEventListener('click', () => {
                 if(el.media_type) {
-                    window.location.href = `/cinema-info?type=${encodeURIComponent(el.media_type)}&id=${encodeURIComponent(el.id)}`;
+                    window.location.assign(`/cinema-info?type=${encodeURIComponent(el.media_type)}&id=${encodeURIComponent(el.id)}`);
                 } else {
-                    window.location.href = `/cinema-info?type=${encodeURIComponent(type)}&id=${encodeURIComponent(el.id)}`;
+                    window.location.assign(`/cinema-info?type=${encodeURIComponent(type)}&id=${encodeURIComponent(el.id)}`);
                 }
             });
         });
-    });
+    } catch(err) {
+        console.error(err);
+        renderDiscoverMessage('The discover page could not load right now.');
+    }
+}
+
+function renderDiscoverMessage(message) {
+    const status = document.createElement('p');
+    status.style.color = 'white';
+    status.style.textAlign = 'center';
+    status.textContent = message;
+    main.appendChild(status);
 }
 

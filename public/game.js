@@ -26,7 +26,7 @@ skip.addEventListener('click', async () => {
         await loadPair();
     } catch(err) {
         console.error(err);
-        arena.textContent = 'Failed to load next matchup.';
+        showArenaError(err instanceof Error ? err.message : 'Failed to load next matchup.');
     } finally {
         next.style.display = 'none';
         skip.disabled = false;
@@ -125,10 +125,11 @@ function renderPair(movies) {
                     });
                 } catch(err) {
                     console.error(err);
-                    winnerID = null
+                    winnerID = null;
+                    showArenaError(err instanceof Error ? err.message : 'Vote failed.');
                     next.style.display = 'none';
                     skip.style.display = 'block';
-                    return
+                    return;
                 }
                 winStreak.innerHTML = `Win Streak<br>${streak}`;
                 round_number++;
@@ -168,10 +169,10 @@ function renderPair(movies) {
                         const list = Array.isArray(data.cinema) ? data.cinema : [];
                         idx = list.findIndex(x => Number(x.tmdb_id) === Number(winnerID));
                     }
-                    ranking.innerHTML = idx === -1 ? `Not ranked in Top 100` : `Leaderboard Ranking: #${idx + 1}`;
+                    ranking.textContent = idx === -1 ? 'Not ranked in Top 100' : `Leaderboard Ranking: #${idx + 1}`;
                     win_rate.className = 'win_rate';
-                    record.innerHTML = `Record:     ${wins} - ${losses}`;
-                    win_rate.innerHTML = `Win Rate:     ${winRate.toFixed(2)}%`
+                    record.textContent = `Record: ${wins} - ${losses}`;
+                    win_rate.textContent = `Win Rate: ${winRate.toFixed(2)}%`;
                     loserNode.appendChild(ranking);
                     loserNode.appendChild(d1);
                     loserNode.appendChild(record);
@@ -203,7 +204,7 @@ function renderPair(movies) {
                 } catch(err) {
                     console.error(err);
                     winnerID = null;
-                    arena.textContent = 'Failed to load next matchup.';
+                    showArenaError(err instanceof Error ? err.message : 'Failed to load next matchup.');
                     skip.style.display = 'block';
                     next.style.display = 'none';
                     return;
@@ -260,9 +261,10 @@ function renderPair(movies) {
                     })
                     aNode.posterEl.classList.add('dim');
                     bNode.posterEl.classList.add('dim');
-                    } catch {
-                        console.log('vote failed');
-                        winnerID = null
+                    } catch(err) {
+                        console.error(err);
+                        winnerID = null;
+                        showArenaError(err instanceof Error ? err.message : 'Vote failed.');
                         next.style.display = 'none';
                         skip.style.display = 'block';
                     }
@@ -313,7 +315,8 @@ function renderPair(movies) {
                         document.getElementById('skip')?.scrollIntoView({ behavior: 'auto', block: 'end'});
                     } catch(err) {
                         console.error(err);
-                        winnerID = null
+                        winnerID = null;
+                        showArenaError(err instanceof Error ? err.message : 'Failed to load next matchup.');
                         next.style.display = 'none';
                         skip.style.display = 'block';
                     }
@@ -325,25 +328,21 @@ function renderPair(movies) {
 }
 
 async function fetchPair({excludedIds = [], championId = null}) {
-    const qs = new URLSearchParams();
-    if(type){
-        qs.set('type', type);
-    }
-    for(const g of genres || []){
-        qs.append('genre', g);
-    }
-    if(popularity) {
-        qs.set('popularity', popularity);
-    }
-    if(excludedIds.length) {
-        qs.set('exclude', excludedIds.join(','));
-    }
-    if(championId) {
-        qs.set('champion_id', championId);
-    }
-    const resp = await fetch(`/pair?${qs.toString()}`, { credentials: 'include' });
+    const resp = await fetch('/pair', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+            type,
+            genre: genres,
+            popularity,
+            exclude: excludedIds,
+            champion_id: championId,
+        }),
+    });
     if(!resp.ok){
-        throw new Error('fetch failed');
+        const message = await getResponseError(resp, 'Failed to load matchup');
+        throw new Error(message);
     }
     return await resp.json();
 }
@@ -359,7 +358,8 @@ async function submitVote({pair_id, winnerID, k}) {
         })
     });
     if(!resp.ok){
-        throw new Error('vote failed');
+        const message = await getResponseError(resp, 'Vote failed');
+        throw new Error(message);
     }
     return await resp.json();
 }
@@ -388,14 +388,45 @@ async function loadPair() {
         }
         renderPair([x, y]);
         arenaBlock.classList.remove('is-loading');
-    } catch (err) {
+  } catch (err) {
     console.error(err);
     arenaBlock.classList.remove('is-loading');
-    arena.innerHTML = '<p style="color:white;text-align:center;">Failed to load matchup.</p>';
+    showArenaError(err instanceof Error ? err.message : 'Failed to load matchup.');
     next.style.display = 'none';
     skip.style.display = 'block';
     throw err;
   }
+}
+
+async function getResponseError(resp, fallback) {
+    try {
+        const payload = await resp.json();
+        if(typeof payload?.error === 'string' && payload.error.trim()) {
+            return payload.error.trim();
+        }
+    } catch {
+        // fall through to text parsing
+    }
+
+    try {
+        const text = await resp.text();
+        if(text.trim()) {
+            return text.trim();
+        }
+    } catch {
+        // ignore text parsing errors
+    }
+
+    return fallback;
+}
+
+function showArenaError(message) {
+    arena.innerHTML = '';
+    const errorMessage = document.createElement('p');
+    errorMessage.style.color = 'white';
+    errorMessage.style.textAlign = 'center';
+    errorMessage.textContent = message;
+    arena.appendChild(errorMessage);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
