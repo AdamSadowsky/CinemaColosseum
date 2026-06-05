@@ -23,7 +23,7 @@ https://cinemacolosseum.com/
 **Backend**
 - Node.js
 - Express.js
-- REST API Integration with [TMDB API](https://www.themoviedb.org/)```
+- REST API Integration with [TMDB API](https://www.themoviedb.org/)
 - PostgreSQL
 
 ## License
