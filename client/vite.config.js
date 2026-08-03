@@ -30,6 +30,7 @@ export default defineConfig({
       "/game.js": "http://localhost:3000",
       "/leaderboards.js": "http://localhost:3000",
       "/cinema_info.js": "http://localhost:3000",
+      "/script.js": "http://localhost:3000",
 
       "/pair": "http://localhost:3000",
       "/vote": "http://localhost:3000",

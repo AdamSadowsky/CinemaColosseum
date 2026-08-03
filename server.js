@@ -102,10 +102,13 @@ const isAllowedOrigin = (candidate, expectedOrigin) => {
     return true;
   }
 
-  return candidateUrl.protocol === expectedUrl.protocol
-    && candidateUrl.port === expectedUrl.port
-    && isLoopbackHost(candidateUrl.hostname)
-    && isLoopbackHost(expectedUrl.hostname);
+  const isLocalDevelopment =
+    candidateUrl.protocol === "http:" &&
+    expectedUrl.protocol === "http:" &&
+    isLoopbackHost(candidateUrl.hostname) &&
+    isLoopbackHost(expectedUrl.hostname);
+
+  return isLocalDevelopment;
 };
 
 const requireSameOrigin = (req, res, next) => {
