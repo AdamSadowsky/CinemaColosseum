@@ -7,6 +7,7 @@ axios.defaults.timeout = 8000;
 const cookieParser = require("cookie-parser");
 const crypto = require("crypto");
 const { rateLimit, ipKeyGenerator } = require("express-rate-limit");
+const path = require('path')
 const helmet = require("helmet");
 app.disable("x-powered-by");
 app.use(helmet({
@@ -66,11 +67,6 @@ app.get("/about-us.html", (req, res) => res.redirect(301, "/about-us"));
 app.get("/privacy-policy.html", (req, res) => res.redirect(301, "/privacy-policy"));
 app.get("/terms.html", (req, res) => res.redirect(301, "/terms"));
 app.get("/cinema-info.html", (req, res) => res.redirect(301, "/cinema-info"));
-
-app.use(express.static("public", {
-  extensions: ["html"],   // /about-us -> /about-us.html
-  index: ["index.html"]   // / -> /index.html
-}));
 
 const getRequestOrigin = (req) => {
   const forwardedProto = req.headers["x-forwarded-proto"];
@@ -341,10 +337,10 @@ app.get('/api/search', searchLimiter, async (req, res) => {
 
       const POPULARITY_MAP = {
         movie: {
-          Beginner: 9000, Intermediate: 6000, 'Cinema Critic': 3000, 'Cinema Connoisseur': 1500, 'Gladiator': 500
+          'Beginner': 9000, 'Intermediate': 6000, 'Cinema Critic': 3000, 'Cinema Connoisseur': 1500, 'Cinephile': 500
         },
         tv: {
-          Beginner: 3000, Intermediate: 2000, 'Cinema Critic': 1500, 'Cinema Connoisseur': 1000, 'Gladiator': 250
+          'Beginner': 3000, 'Intermediate': 2000, 'Cinema Critic': 1500, 'Cinema Connoisseur': 1000, 'Cinephile': 250
         }
       };
 
@@ -487,7 +483,7 @@ app.get('/api/search', searchLimiter, async (req, res) => {
           }, { onConflict: 'cache_key'});
 
           if(cacheWriteError) {
-          console.error('cache write error', cacheWriteError);
+            console.error('cache write error', cacheWriteError);
           }
         }
 
@@ -503,21 +499,21 @@ app.get('/api/search', searchLimiter, async (req, res) => {
           const b = pool[Math.floor(Math.random() * pool.length)];
           const pair_id = crypto.randomUUID();
           const { error } = await supabase.from("pair_tokens").insert({
-          pair_id,
-          type,
-          a_id: a.id,
-          b_id: b.id,
-          session_id: req.sid,
-          expires_at: pair_expires_at, 
-          used: false,
-          k: kValue
-        });
+            pair_id,
+            type,
+            a_id: a.id,
+            b_id: b.id,
+            session_id: req.sid,
+            expires_at: pair_expires_at, 
+            used: false,
+            k: kValue
+          });
 
-        if(error) {
-          return res.status(500).json({ error: 'pair token insertion failed' });
-        }
+          if(error) {
+            return res.status(500).json({ error: 'pair token insertion failed' });
+          }
 
-        return res.json({ pair_id, a, b });
+          return res.json({ pair_id, a, b });
         } else {
           if(pool.length < 2) {
             continue;
@@ -804,5 +800,18 @@ app.get('/api/search', searchLimiter, async (req, res) => {
     return p;
   }
 
-  const PORT = Number(process.env.PORT) || 3000;
-  app.listen(PORT, "0.0.0.0", () => console.log(`Listening on ${PORT}`));
+const clientDistPath = path.join(__dirname, "client", "dist");
+
+app.use(express.static(clientDistPath));
+
+app.get(["/", "/discover"], (req, res) => {
+  res.sendFile(path.join(clientDistPath, "index.html"));
+});
+
+app.use(express.static(path.join(__dirname, "public"), {
+  extensions: ["html"],
+  index: false
+}));
+
+const PORT = Number(process.env.PORT) || 3000;
+app.listen(PORT, "0.0.0.0", () => console.log(`Listening on ${PORT}`));

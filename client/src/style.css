@@ -65,8 +65,8 @@ body {
 
 .nav_bar .nav_wrap a {
     margin: auto 25px;
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
     color: cornsilk;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 20px;
@@ -160,9 +160,20 @@ body {
 .selection {
     display:grid;
     grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-    gap: 60px;
+    gap: 45px;
     margin: 0 auto 100px;
     width: min(1400px, calc(100% - 32px));
+}
+
+.card {
+    position: relative;
+    width: 100%;
+    padding: 7px;
+    background-color: #151f30;
+    text-align: center;
+    color: aliceblue;
+    background: linear-gradient(90deg, #2e343f, #202a3d, #15243d);
+    border-radius: 20px;
 }
 
 .modes_head, .rounds_head, .genre_head, .popularity_head, .year_head {
@@ -245,7 +256,7 @@ input {
 .modes_head:has(.dropdown_item#mode1d:hover) .hint#mode1, .modes_head:has(.dropdown_item#mode2d:hover) .hint#mode2,
 .popularity_head:has(.dropdown_item#beginner1:hover) .hint#beginner, .popularity_head:has(.dropdown_item#intermediate2:hover) .hint#intermediate,
 .popularity_head:has(.dropdown_item#critic3:hover) .hint#critic, .popularity_head:has(.dropdown_item#connoisseur4:hover) .hint#connoisseur,
-.popularity_head:has(.dropdown_item#gladiator5:hover) .hint#gladiator {
+.popularity_head:has(.dropdown_item#cinephile5:hover) .hint#cinephile {
     display: inline-block;
     position: absolute;
     background-color: #111c33;
@@ -278,7 +289,11 @@ input {
     background-color: #111c33;
 }
 
-.dropdown_bttn:is(:focus) + .modes_dropdown, .dropdown_bttn:is(:focus) + .rounds_dropdown, .dropdown_bttn:is(:focus) + .genre_dropdown, .dropdown_bttn:is(:focus) + .popularity_dropdown, .dropdown_bttn:is(:focus) + .leaderboard_dropdown,  .modes_dropdown:hover, .rounds_dropdown:hover, .genre_dropdown:hover, .popularity_dropdown:hover, .leaderboard_dropdown:hover  {
+
+.modes_head:focus-within .modes_dropdown,
+.rounds_head:focus-within .rounds_dropdown,
+.genre_head:focus-within .genre_dropdown,
+.popularity_head:focus-within .popularity_dropdown {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
@@ -315,12 +330,10 @@ input {
     position: relative;
     border: 1px solid transparent;
     aspect-ratio: 4/5;
-    transition: 
-    border 200ms ease,
-    box-shadow 200ms ease;
-    will-change: transform;
     z-index: 0;
     margin: 0;
+    border: 1px solid transparent;
+    will-change: transform;
 }
 
 .card h1 {
@@ -337,18 +350,25 @@ input {
 .card .hover_poster {
     position: absolute;
     inset: 0;
-    opacity: 0;
     height: 100%;
     width: 100%;
     object-fit: cover;
     z-index: 0;
-    border-radius: 20px;
-    transition: opacity 0.5s ease;
+    border: 1px solid transparent;
     will-change: transform;
+    border-radius: 20px;
+    opacity: 1;
+    animation: posterFadeIn 1.2s ease
 }
 
-.card:hover .hover_poster {
-    opacity: 0.5;
+@keyframes posterFadeIn {
+    from {
+        opacity: 0.1;
+    } 
+
+    to {
+        opacity: 1;
+    }
 }
 
 .card:hover .options {
@@ -363,9 +383,20 @@ input {
     z-index: 1;
 }
 
-.card:hover {
+.card:hover .hover_poster:hover {
     border-color:purple;
     box-shadow: 0 0 12px 1px purple;
+    opacity: 1;
+}
+
+#settings {
+    transition: border-color 0.8s ease, box-shadow 1.5s ease;
+}
+
+#settings:hover {
+    border-color:purple;
+    box-shadow: 0 0 12px 1px purple;
+    opacity: 1;
 }
 
 #footer {
@@ -385,7 +416,7 @@ input {
 }
 
 
-img { max-width: 100%; height: auto; }
+img { max-width: 100%; height: fit-content; }
 
 @media (max-width: 700px) {
 
@@ -428,17 +459,16 @@ img { max-width: 100%; height: auto; }
   }
 
   .nav_wrap{
-    width: 100%;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 8px 14px;
-    padding: 6px 0 10px;
+    gap: 50px;
   }
 
   .nav_bar .nav_wrap a{
     margin: 0;
     width: auto;
+    height: auto;
     font-size: 16px;
   }
 
@@ -561,22 +591,20 @@ body.page-loading > * {
 
 #footer .footer {
     display: flex;
+    position: relative;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    gap: 10px 18px;
-    width: 100%;
     margin: 0;
     padding: 18px clamp(16px, 4vw, 38px) 22px;
     border: 0;
     border-radius: 0;
+    top: 100%;
     background: linear-gradient(180deg, rgba(17, 28, 51, 0.96), rgba(10, 17, 31, 0.96));
     box-shadow: none;
 }
 
 #footer a {
-    margin: 0;
-    padding: 5px 8px;
     border-radius: 10px;
     color: #e5ecfb;
     font-size: 15px;

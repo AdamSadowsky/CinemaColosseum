@@ -4,8 +4,7 @@
   "main": "server.js",
   "scripts": {
   "start": "node server.js",
-  "copy:public": "shx mkdir -p public && shx cp -r src/* public/",
-  "build": "npm run copy:public"
+  "build": "npm --prefix client ci && npm --prefix client run build"
 },
   "repository": {
     "type": "git",
@@ -27,7 +26,8 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "express-rate-limit": "^8.2.1",
-    "helmet": "^8.1.0"
+    "helmet": "^8.1.0",
+    "react-router-dom": "^7.17.0"
   },
   "devDependencies": {
     "clean-css-cli": "^5.6.3",
