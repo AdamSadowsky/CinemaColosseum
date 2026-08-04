@@ -40,15 +40,16 @@
             <div class="arenaBlock" id="arenaBlock">
                 <div class="arena" id="arena"></div>
                 <button class="skip" id="skip">Skip</button>
-                <button class="restart">Restart</button>
-                <div class="exit">
-                    <a href="/">Exit</a>
-                </div>
-                <div class="champ">Your Champion</div>
                 <p class="end">Game Over<br>Play Again?</p>
                 <button id="next" style="display: none;">
                 <span class="material-icons">arrow_forward</span>
                 </button>
+            </div>
+            <div class="game_actions">
+                <button class="restart">Restart</button>
+                <div class="exit">
+                    <a href="/">Exit</a>
+                </div>
             </div>
             <template id="card_tmp">
                 <div class="game_card">
@@ -70,8 +71,8 @@
             </template>
         </div>
         <div id="footer"></div>
-        <script src='script.js' defer></script>
         <script src='includeHeader.js' defer></script>
         <script src="game.js" defer></script>
+        <script src="script.js" defer></script>
     </body>
 </html>

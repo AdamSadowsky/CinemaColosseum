@@ -10,7 +10,6 @@ const tmp = document.getElementById('card_tmp');
 const skip = document.getElementById('skip');
 const restart = document.querySelector('.restart');
 const exit = document.querySelector('.exit');
-const champ = document.querySelector('.champ');
 const next = document.getElementById('next');
 const round = document.querySelector('.round');
 const winStreak = document.querySelector('.win_streak');
@@ -105,7 +104,7 @@ function renderPair(movies) {
             bNode.divider = divider; 
         }
         node.onclick = async () => {
-            if(winnerID){
+            if(winnerID) {
                 return; 
             }
             winnerID = m.id
@@ -134,6 +133,7 @@ function renderPair(movies) {
                 winStreak.innerHTML = `Win Streak<br>${streak}`;
                 round_number++;
                 if(round_number > rounds) {
+                    arenaBlock.classList.add('is-loading');
                     round.style.display = 'none';
                     winStreak.style.display = 'none';
                     const winnerNode = node === aNode ? aNode : bNode;
@@ -162,12 +162,19 @@ function renderPair(movies) {
                     d1.className = 'd1';
                     record.className = 'record';
                     d2.className = 'd2';
-                    const res = await fetch(`/leaderboard?type=${type}`, { credentials: "include" });
-                    let idx = -1;
-                    if(res.ok) {
-                        const data = await res.json();
-                        const list = Array.isArray(data.cinema) ? data.cinema : [];
-                        idx = list.findIndex(x => Number(x.tmdb_id) === Number(winnerID));
+                    try {
+                        const res = await fetch(`/leaderboard?type=${type}`, { credentials: "include" });
+                        arenaBlock.classList.remove('is-loading');
+                        let idx = -1;
+                        if(res.ok) {
+                            const data = await res.json();
+                            const list = Array.isArray(data.cinema) ? data.cinema : [];
+                            idx = list.findIndex(x => Number(x.tmdb_id) === Number(winnerID));
+                        }
+                    } catch(err) {
+
+                    } finally {
+                        arenaBlock.classList.remove('is-loading');
                     }
                     ranking.textContent = idx === -1 ? 'Not ranked in Top 100' : `Leaderboard Ranking: #${idx + 1}`;
                     win_rate.className = 'win_rate';
@@ -181,7 +188,6 @@ function renderPair(movies) {
                     skip.style.display = 'none';
                     restart.style.display = 'block';
                     exit.style.display = 'block';
-                    champ.style.display = 'block';
                     d1.style.display = 'block';
                     d2.style.display = 'block';
                     restart.onclick = async () => {
@@ -366,7 +372,7 @@ async function submitVote({pair_id, winnerID, k}) {
 
 async function loadPair() {
     arenaBlock.classList.add('is-loading');
-    try{
+    try {
         const championId = (modes === 'Gladiator' && champion && round_number > 1) ? champion.id : null
         const excludedIds = modes === 'Gladiator' ? [...used].filter(id => id !== championId) : [];
         const data = await fetchPair({ excludedIds, championId });
@@ -388,7 +394,7 @@ async function loadPair() {
         }
         renderPair([x, y]);
         arenaBlock.classList.remove('is-loading');
-  } catch (err) {
+  } catch(err) {
     console.error(err);
     arenaBlock.classList.remove('is-loading');
     showArenaError(err instanceof Error ? err.message : 'Failed to load matchup.');

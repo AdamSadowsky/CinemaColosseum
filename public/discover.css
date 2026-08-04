@@ -1,0 +1,56 @@
+.Movie-Grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(200px, 22vw, 260px), 1fr));
+    gap: 25px;
+    margin: 20px 20px;
+    border-radius: 20px;
+    margin-bottom: 100px;
+}
+
+.Movie-Card {
+    width: 100%;
+    height: 100%;
+    background-color: #151f30;
+    opacity: 1;
+    overflow: hidden;
+}
+
+.Movie-Poster {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: aliceblue;
+    object-fit: cover;
+    box-sizing: border-box;
+    transition: 
+    opacity 200ms ease,
+    border-color 200ms ease;
+    border: 3px solid transparent;
+}
+
+.Movie-Poster:hover {
+    opacity: .5;
+    border-color: whitesmoke;
+}
+
+.loading {
+    pointer-events: none;
+}
+
+.loading > * {
+  opacity: 0;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 6px solid orange;
+    border-top-color: orangered;
+    animation: spin 0.9s linear infinite;
+    z-index: 1;
+}
